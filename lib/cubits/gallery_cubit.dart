@@ -21,16 +21,21 @@ class GalleryCubit extends Cubit<GalleryState> {
         size: 30,
       );
 
-  Future getHits({required String? search}) async {
-    if (search != null) {
+  Future getHits({
+    required bool isSearching,
+    required String searchText,
+  }) async {
+    if (isSearching == true) {
       _hits.clear();
-      emit(GalleryState.loaded(true, _hits, null));
+      emit(GalleryState.loaded(true, true, _hits, null));
+    } else {
+      emit(GalleryState.loaded(false, true, _hits, null));
     }
 
     await GalleryRepository()
         .fetchHits(
           pagination: _pagination,
-          search: search,
+          search: searchText,
         )
         .then((response) => {
               if (response is PixabayResponse)
@@ -39,14 +44,14 @@ class GalleryCubit extends Cubit<GalleryState> {
                     {
                       _pagination.offset += 1,
                       _hits.addAll(response.hits),
-                      emit(const GalleryState.initial()),
-                      emit(GalleryState.loaded(false, _hits, null))
+                      emit(GalleryState.loaded(false, false, _hits, null))
                     }
                   else
-                    emit(GalleryState.loaded(false, _hits, 'No results'))
+                    emit(const GalleryState.loaded(
+                        false, false, [], 'No results'))
                 }
               else if (response is StatusResponse)
-                emit(GalleryState.loaded(false, [], response.message))
+                emit(GalleryState.loaded(false, false, [], response.message))
             });
   }
 }

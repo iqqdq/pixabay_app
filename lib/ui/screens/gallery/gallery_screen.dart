@@ -25,13 +25,19 @@ class _GalleryScreenState extends State<GalleryScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        _galleryCubit.getHits(search: null);
+        _galleryCubit.getHits(
+          isSearching: false,
+          searchText: _textEditingController.text,
+        );
       }
     });
 
     super.initState();
 
-    _galleryCubit.getHits(search: '');
+    _galleryCubit.getHits(
+      isSearching: false,
+      searchText: _textEditingController.text,
+    );
   }
 
   @override
@@ -41,6 +47,15 @@ class _GalleryScreenState extends State<GalleryScreen> {
     _scrollController.dispose();
 
     super.dispose();
+  }
+
+  void _searchText({required String searchText}) {
+    EasyDebounce.debounce(
+      'search_debouncer',
+      const Duration(milliseconds: 500),
+      () async => _galleryCubit.getHits(
+          isSearching: true, searchText: _textEditingController.text),
+    );
   }
 
   @override
@@ -54,16 +69,10 @@ class _GalleryScreenState extends State<GalleryScreen> {
               bottom: 10.0,
             ),
             child: TextField(
-              controller: _textEditingController,
-              focusNode: _focusNode,
-              decoration: const InputDecoration(hintText: 'Search'),
-              onChanged: (value) => EasyDebounce.debounce(
-                  'search_debouncer', const Duration(milliseconds: 500),
-                  () async {
-                _galleryCubit.resetPagination().whenComplete(() =>
-                    _galleryCubit.getHits(search: _textEditingController.text));
-              }),
-            ),
+                controller: _textEditingController,
+                focusNode: _focusNode,
+                decoration: const InputDecoration(hintText: 'Search'),
+                onChanged: (value) => _searchText(searchText: value)),
           ),
         ),
         body: BlocConsumer<GalleryCubit, GalleryState>(
@@ -74,11 +83,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
                 initial: () => indicator,
                 loaded: (
                   isLoading,
+                  isUpdating,
                   hits,
                   error,
                 ) =>
-                    SizedBox.expand(
-                  child: Stack(children: [
+                    Column(children: [
+                  Expanded(
+                      child: Stack(children: [
                     /// GRID LIST
                     GestureDetector(
                       onTap: () => FocusScope.of(context).unfocus(),
@@ -126,8 +137,19 @@ class _GalleryScreenState extends State<GalleryScreen> {
                           )),
 
                     isLoading ? indicator : Container(),
-                  ]),
-                ),
+                  ])),
+                  isUpdating
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(top: 20.0),
+                              child: indicator,
+                            )
+                          ],
+                        )
+                      : Container(),
+                ]),
               );
             }));
   }

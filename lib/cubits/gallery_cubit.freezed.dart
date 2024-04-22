@@ -19,20 +19,25 @@ mixin _$GalleryState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(bool isLoading, List<Hit> hits, String? error)
+    required TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)
         loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult? Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -114,7 +119,8 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(bool isLoading, List<Hit> hits, String? error)
+    required TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)
         loaded,
   }) {
     return initial();
@@ -124,7 +130,9 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult? Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
   }) {
     return initial?.call();
   }
@@ -133,7 +141,9 @@ class _$InitialImpl implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -184,7 +194,7 @@ abstract class _$$LoadedImplCopyWith<$Res> {
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({bool isLoading, List<Hit> hits, String? error});
+  $Res call({bool isLoading, bool isUpdating, List<Hit> hits, String? error});
 }
 
 /// @nodoc
@@ -199,6 +209,7 @@ class __$$LoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? isLoading = null,
+    Object? isUpdating = null,
     Object? hits = null,
     Object? error = freezed,
   }) {
@@ -206,6 +217,10 @@ class __$$LoadedImplCopyWithImpl<$Res>
       null == isLoading
           ? _value.isLoading
           : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      null == isUpdating
+          ? _value.isUpdating
+          : isUpdating // ignore: cast_nullable_to_non_nullable
               as bool,
       null == hits
           ? _value._hits
@@ -222,11 +237,14 @@ class __$$LoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$LoadedImpl implements _Loaded {
-  const _$LoadedImpl(this.isLoading, final List<Hit> hits, this.error)
+  const _$LoadedImpl(
+      this.isLoading, this.isUpdating, final List<Hit> hits, this.error)
       : _hits = hits;
 
   @override
   final bool isLoading;
+  @override
+  final bool isUpdating;
   final List<Hit> _hits;
   @override
   List<Hit> get hits {
@@ -240,7 +258,7 @@ class _$LoadedImpl implements _Loaded {
 
   @override
   String toString() {
-    return 'GalleryState.loaded(isLoading: $isLoading, hits: $hits, error: $error)';
+    return 'GalleryState.loaded(isLoading: $isLoading, isUpdating: $isUpdating, hits: $hits, error: $error)';
   }
 
   @override
@@ -250,12 +268,14 @@ class _$LoadedImpl implements _Loaded {
             other is _$LoadedImpl &&
             (identical(other.isLoading, isLoading) ||
                 other.isLoading == isLoading) &&
+            (identical(other.isUpdating, isUpdating) ||
+                other.isUpdating == isUpdating) &&
             const DeepCollectionEquality().equals(other._hits, _hits) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isLoading,
+  int get hashCode => Object.hash(runtimeType, isLoading, isUpdating,
       const DeepCollectionEquality().hash(_hits), error);
 
   @JsonKey(ignore: true)
@@ -268,30 +288,35 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(bool isLoading, List<Hit> hits, String? error)
+    required TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)
         loaded,
   }) {
-    return loaded(isLoading, hits, error);
+    return loaded(isLoading, isUpdating, hits, error);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
-    TResult? Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult? Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
   }) {
-    return loaded?.call(isLoading, hits, error);
+    return loaded?.call(isLoading, isUpdating, hits, error);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(bool isLoading, List<Hit> hits, String? error)? loaded,
+    TResult Function(
+            bool isLoading, bool isUpdating, List<Hit> hits, String? error)?
+        loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(isLoading, hits, error);
+      return loaded(isLoading, isUpdating, hits, error);
     }
     return orElse();
   }
@@ -329,11 +354,11 @@ class _$LoadedImpl implements _Loaded {
 }
 
 abstract class _Loaded implements GalleryState {
-  const factory _Loaded(
-          final bool isLoading, final List<Hit> hits, final String? error) =
-      _$LoadedImpl;
+  const factory _Loaded(final bool isLoading, final bool isUpdating,
+      final List<Hit> hits, final String? error) = _$LoadedImpl;
 
   bool get isLoading;
+  bool get isUpdating;
   List<Hit> get hits;
   String? get error;
   @JsonKey(ignore: true)
