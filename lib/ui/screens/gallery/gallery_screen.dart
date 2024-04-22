@@ -22,14 +22,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   void initState() {
-    _textEditingController.addListener(() {
-      EasyDebounce.debounce(
-          'search_debouncer', const Duration(milliseconds: 500), () async {
-        _galleryCubit.resetPagination().whenComplete(
-            () => _galleryCubit.getHits(search: _textEditingController.text));
-      });
-    });
-
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -65,6 +57,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
               controller: _textEditingController,
               focusNode: _focusNode,
               decoration: const InputDecoration(hintText: 'Search'),
+              onChanged: (value) => EasyDebounce.debounce(
+                  'search_debouncer', const Duration(milliseconds: 500),
+                  () async {
+                _galleryCubit.resetPagination().whenComplete(() =>
+                    _galleryCubit.getHits(search: _textEditingController.text));
+              }),
             ),
           ),
         ),
